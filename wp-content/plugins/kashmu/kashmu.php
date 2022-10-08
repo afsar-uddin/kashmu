@@ -43,11 +43,29 @@ defined('ABSPATH') or die('Hey, you can\t access this file, you silly human!');
 if (!class_exists('kashmuPlugin')) {
     class kashmuPlugin
     {
+        public $plugin;
+
+        function __construct()
+        {
+            $this->plugin = plugin_basename(__FILE__);
+        }
+
         function register()
         {
             add_action('admin_enqueue_scripts', array($this, 'enqueue'));
 
             add_action('admin_menu', array($this, 'add_admin_pages'));
+
+            // echo $this->plugin;
+            add_filter("plugin_action_links_$this->plugin", array($this, 'settings_link'));
+        }
+
+        public function settings_link($links)
+        {
+            $settings_link = '<a href="admin.php?page=kashmu_plugin">Settings</a>';
+            array_push($links, $settings_link);
+
+            return $links;
         }
 
         public function add_admin_pages()
