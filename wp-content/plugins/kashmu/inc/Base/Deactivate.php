@@ -4,7 +4,7 @@
  * @package kashmu
  */
 
-namespace Inc;
+namespace Inc\Base;
 
 class Deactivate
 {
