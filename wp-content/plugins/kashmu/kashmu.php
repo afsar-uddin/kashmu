@@ -40,6 +40,14 @@ defined('ABSPATH') or die('Hey, you can\t access this file, you silly human!');
 //   }
 
 // CLASS
+if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {
+    require_once dirname(__FILE__) . '/vendor/autoload.php';
+}
+
+use Inc\Activate;
+use Inc\Deactivate;
+use Inc\Admin\AdminPages;
+
 if (!class_exists('kashmuPlugin')) {
     class kashmuPlugin
     {
@@ -96,6 +104,11 @@ if (!class_exists('kashmuPlugin')) {
             wp_enqueue_style('kashmu-style', plugins_url('/assets/css/style.css', __FILE__));
             wp_enqueue_script('kashmu-script', plugins_url('/assets/js/script.js', __FILE__));
         }
+
+        function activate()
+        {
+            Activate::activate();
+        }
     }
 
 
@@ -104,10 +117,8 @@ if (!class_exists('kashmuPlugin')) {
     $kashmuPlugin->register();
 
     // Activation
-    require_once plugin_dir_path(__FILE__) . '/inc/kashmu-activate.php';
-    register_activation_hook(__FILE__, ['kashmuActivate', 'activate']);
+    register_activation_hook(__FILE__, [$kashmuPlugin, 'activate']);
 
     // Deactivation
-    require_once plugin_dir_path(__FILE__) . '/inc/kashmu-deactivate.php';
-    register_deactivation_hook(__FILE__, ['kashmuDeactivate', 'deactivate']);
+    register_deactivation_hook(__FILE__, ['Deactivate', 'deactivate']);
 }
