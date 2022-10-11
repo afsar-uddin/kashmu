@@ -3,22 +3,35 @@
 namespace Inc\Pages;
 
 use \Inc\Base\BaseController;
+use \Inc\Api\SettingsApi;
 
 class Admin extends BaseController
 {
+
+    public $settings;
+    public $pages;
+
+    public function __construct()
+    {
+        $this->settings = new SettingsApi();
+
+        $this->pages = [
+            [
+                'page_title' => 'Kashmu Plugin',
+                'menu_title' => 'Kashmu',
+                'capability' => 'manage_options',
+                'menu_slug' => 'kashmu_plugin',
+                'callback' => function () {
+                    echo "<h1>Test Plugin of Kashmu</h1>";
+                },
+                'icon_url' => 'dashicons-store',
+                'position' => 110
+            ]
+        ];
+    }
+
     public function register()
     {
-        add_action('admin_menu', array($this, 'add_admin_pages'));
-    }
-
-    public function add_admin_pages()
-    {
-        add_menu_page('Kashmu Plugin', 'Kashmu', 'manage_options', 'kashmu_plugin', array($this, 'admin_index'), 'dashicons-store', 110);
-    }
-
-    public function admin_index()
-    {
-        require_once $this->plugin_path . 'templates/admin.php';
-        // require_once plugin_dir_path(__FILE__) . '../../templates/admin.php';
+        $this->settings->addPages($this->pages)->register();
     }
 }
