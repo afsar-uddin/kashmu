@@ -10,6 +10,7 @@ class Admin extends BaseController
 
     public $settings;
     public $pages;
+    public $subpages;
 
     public function __construct()
     {
@@ -28,10 +29,43 @@ class Admin extends BaseController
                 'position' => 110
             ]
         ];
+
+        $this->subpages = [
+            [
+                'parent_slug' => 'kashmu_plugin',
+                'page_title' => 'Custom Post Type',
+                'menu_title' => 'CPT',
+                'capability' => 'manage_options',
+                'menu_slug' => 'kashmu_cpt',
+                'callback' => function () {
+                    echo "<h1>CPT Manager</h1>";
+                }
+            ],
+            [
+                'parent_slug' => 'kashmu_plugin',
+                'page_title' => 'Custom Taxonomy',
+                'menu_title' => 'Taxonomies',
+                'capability' => 'manage_options',
+                'menu_slug' => 'kashmu_taxonomies',
+                'callback' => function () {
+                    echo "<h1>Taxonomies Manager</h1>";
+                }
+            ],
+            [
+                'parent_slug' => 'kashmu_plugin',
+                'page_title' => 'Custom Widget',
+                'menu_title' => 'CW',
+                'capability' => 'manage_options',
+                'menu_slug' => 'kashmu_widget',
+                'callback' => function () {
+                    echo "<h1>Custom Widget Manager</h1>";
+                }
+            ],
+        ];
     }
 
     public function register()
     {
-        $this->settings->addPages($this->pages)->register();
+        $this->settings->addPages($this->pages)->wuthSubPages('Dashboard')->addSubPages($this->subpages)->register();
     }
 }
